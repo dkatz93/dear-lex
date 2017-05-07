@@ -1,7 +1,6 @@
 {
   "intents": [
     {
-      "intent": "NameCapture",
       "slots": [
         {
           "name": "USFirstName",
@@ -11,7 +10,35 @@
           "name": "UKFirstName",
           "type": "AMAZON.GB_FIRST_NAME"
         }
+      ],
+      "intent": "NameCapture"
+    },
+    {
+      "intent": "CreateEntry"
+    },
+    {
+      "intent": "UpdateEntry"
+    },
+    {
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.DATE"
+        }
+      ],
+      "intent": "ReadEntry"
+    },
+    {
+      "intent": "CreateNewJournal",
+      "slots": [
+        {
+          "name": "JournalName",
+          "type": "AMAZON.LITERAL"
+        }
       ]
+    },
+    {
+      "intent": "ListAllJournals"
     },
     {
       "intent": "AMAZON.StopIntent"

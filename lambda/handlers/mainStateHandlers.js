@@ -13,7 +13,43 @@ var mainStateHandlers = Alexa.CreateStateHandler(constants.states.MAIN, {
       this.emitWithState('NewSession');
     }
   },
+  'CreateNewJournal': function(){
+  	var journalName = this.event.request.intent.slots.JournalName.value;
+  	if(journalName){
+  		var folderID = this.attributes['folderID']
+  		if(this.attributes[journalName]){
+  			this.emit(':ask', `It looks like you already have a journal called ${journalName}. If  you would like to create an entry in this journal, you can say, record new entry in ${journalName} or pick a new name for the new journal.`,'What would you like to do?')
+  		} else {
+	  		var fileMetadata = {
+	  			'title' : journalName,
+	  			parents: [{id: folderID}]
+	  		}
+	  		drive.files.insert({
+	  			resource: fileMetadata,
+	  			field: 'id'
+	  		}, function(err, file){
+	  			if(err){
+	  				console.log(err)
+	  			} else {
+	  				this.attributes[journalName] = file.id
+	  			}
+	  		})
+	  	}
+  	}
 
+  },
+  'ListAllJournals': function(){
+
+  },
+  'CreateEntry': function(){
+
+  },
+  'ReadEntry': function(){
+
+  },
+  'UpdateEntry': function(){
+
+  },
   'AMAZON.StopIntent': function () {
     this.emit(':tell', `Goodbye ${name}! Have a fantastic day!.`);
   },

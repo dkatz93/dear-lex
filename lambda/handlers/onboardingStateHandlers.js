@@ -7,9 +7,10 @@ var onboardingStateHandlers = Alexa.CreateStateHandler(constants.states.ONBOARDI
     var name = this.attributes['userName'];
     if (name) {
       this.handler.state = constants.states.MAIN;
+
       this.emitWithState('LaunchRequest');
     } else {
-      this.emit(':ask', 'Welcome to Dear Lex. The skill that allows you to manage your daily journal', 'Tell me your name by saying: My name is, and then your name.');
+      this.emit(':ask', 'Welcome to Dear Lex. The skill that allows you to manage your daily journal. I will create a folder in your google drive where you will be able to see your journal entries once you tell me your name', 'Tell me your name by saying: My name is, and then your name.');
     }
   },
    'NameCapture': function () {
@@ -24,7 +25,22 @@ var onboardingStateHandlers = Alexa.CreateStateHandler(constants.states.ONBOARDI
     }
     if (name) {
       this.attributes['userName'] = name;
-      this.emit(':ask', `Ok ${name}! Tell me if you would like to create a journal, create an entry or have me read you a prior entry.`, `What would you like to do?`);
+      	//creates a folder in google drive for alexa journal
+      var folderMetadata = {
+  			'title' : 'Dear Lex',
+  			'mimeType' : 'application/vnd.google-apps.folder'
+  		};
+  		drives.files.insert({
+  			resource: folderMetadata,
+  			fields: 'id'
+  		}, function(err, file){
+  			if(err){
+  				console.log(err);
+  			} else {
+  				this.attributes['folderID'] = file.id;
+  			}
+  		})
+      this.emit(':ask', `Ok ${name}! I have created a folder in google drive called Dear Lex where you can manage your journal. Tell me if you would like to create a journal, create an entry or have me read you a prior entry.`, `What would you like to do?`);
     } else {
       this.emit(':ask', `Sorry, I didn\'t recognise that name!`, `'Tell me your name by saying: My name is, and then your name.'`);
     }

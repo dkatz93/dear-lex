@@ -1,2 +1,29 @@
 NameCapture my name is {USFirstName}
 NameCapture my name is {UKFirstName}
+CreateEntry Record new entry
+UpdateEntry Edit Journal
+ReadEntry Read my journal from {Date}
+ReadEntry Read entry from {Date}
+ReadEntry Read journal entered on {Date}
+ReadEntry What was my entry on {Date}
+ReadEntry What was my entry from {Date}
+ReadEntry What was my journal entry on {Date}
+ReadEntry What was my journal entry from {Date}
+ReadEntry What did I journal {Date}
+ReadEntry What did I journal on {Date}
+ReadEntry What did I write {Date}
+ReadEntry What did I write on {Date}
+ReadEntry Tell me my entry from {Date}
+ReadEntry Tell me my journal entry from {Date}
+ReadEntry Tell me my entry on {Date}
+ReadEntry Tell me my journal entry on {Date}
+ReadEntry Tell me {Date} s entry
+CreateNewJournal Create a new journal called {JournalName}
+ListAllJournals List all of the journals I have
+ListAllJournals List my journals
+ListAllJournals List all of my journals
+ListAllJournals What journals do I have
+ListAllJournals List all of the diaries I have
+ListAllJournals List my diaries
+ListAllJournals List all of my diaries
+ListAllJournals What diaries do I have

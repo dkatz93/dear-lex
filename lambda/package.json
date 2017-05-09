@@ -1,6 +1,9 @@
 {
   "author": "DanielleKatz",
   "dependencies": {
-    "alexa-sdk": "^1.0.6"
+    "alexa-sdk": "^1.0.6",
+    "gapi": "0.0.3",
+    "google-auth-library": "^0.10.0",
+    "googleapis": "^19.0.0"
   }
 }

@@ -2,7 +2,8 @@ var Alexa = require('alexa-sdk');
 var google = require('googleapis');
 
 var oauth2Client = require('../helpers/auth')
-var createFolder = require('../helpers/createFolder')
+var createFolder = require('../helpers/createFolder');
+var createFile = require('../helpers/createFile');
 var constants = require('../constants');
 
 var onboardingStateHandlers = Alexa.CreateStateHandler(constants.states.ONBOARDING, {
@@ -15,7 +16,7 @@ var onboardingStateHandlers = Alexa.CreateStateHandler(constants.states.ONBOARDI
     	var accessToken = this.event.session.user.accessToken;
     	if(accessToken){
     		oauth2Client.setCredentials({access_token: accessToken})
-    		this.emit(':ask', 'Welcome to Dear Lex. The skill that allows you to manage your daily journal. I will create a folder in your google drive where you will be able to see your journal entries once you tell me your name', 'Tell me your name by saying: My name is, and then your name.');
+    		this.emit(':ask', 'Welcome to Dear Lex. The skill that allows you to manage your daily journal. I will create a file in your google drive where you will be able to see your journal entries once you tell me your name', 'Tell me your name by saying: My name is, and then your name.');
     	} else {
     		this.emit(':tellWithLinkAccountCard', 'Please link your account to use this skill. I\'ve sent the details to your alexa app.');
     	}
@@ -33,18 +34,22 @@ var onboardingStateHandlers = Alexa.CreateStateHandler(constants.states.ONBOARDI
     }
     if (name) {
       this.attributes['userName'] = name;
-     	// creates a folder in google drive for alexa journal
-      var folderMetadata = {
-  			'name' : 'Dear-Lex',
-  			'mimeType' : 'application/vnd.google-apps.folder'
-  		};
+     	
+  		this.handler.state = constants.states.MAIN; 
   		var accessToken = this.event.session.user.accessToken;
-  		createFolder(google, accessToken, oauth2Client, folderMetadata)
-  		.then(function(file){
-  			this.attributes['folderID'] = file.id;
+  		var fileMetadata = {
+        'name' : 'Dear-Lex-General',
+        'mimeType' : 'application/vnd.google-apps.document'
+      }
+      var media = {
+        'mimeType' : 'text/plain',
+        'body' : ''
+      }
+  		createFile(google, accessToken, oauth2Client, fileMetadata, media)
+  		.then(res => {
+  			this.attributes['journalID'] = res.id;
+  			this.emit(':ask', `Ok ${name}! I have created a file in google drive called Dear Lex General where you can view your journal. Tell me if you would like to create a journal, create an entry or have me read you a prior entry.`, `What would you like to do?`);
   		})
-  		this.handler.state = constants.states.MAIN;
-      this.emit(':ask', `Ok ${name}! I have created a folder in google drive called Dear Lex where you can manage your journal. Tell me if you would like to create a journal, create an entry or have me read you a prior entry.`, `What would you like to do?`);
     } else {
       this.emit(':ask', `Sorry, I didn\'t recognise that name!`, `'Tell me your name by saying: My name is, and then your name.'`);
     }

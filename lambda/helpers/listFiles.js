@@ -10,7 +10,7 @@ var listFiles = function(googleapi, accessToken,oauth2Client, qData){
 			if(err){
 				reject(err)
 			} else {
-				resolve(res)
+				resolve(JSON.parse(res))
 			}
 		})
 	})

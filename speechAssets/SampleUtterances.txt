@@ -1,7 +1,29 @@
 NameCapture my name is {USFirstName}
 NameCapture my name is {UKFirstName}
-CreateEntry Record new entry
-UpdateEntry Edit Journal
+CreateEntry Record new entry {Today I went to the store. It was awesome and I wish I could go every day | JournalEntry}
+CreateEntry Record new diary entry {Today I went to the store. It was awesome and I wish I could go every day | JournalEntry}
+CreateEntry Begin new entry {Today I went to the store. It was awesome and I wish I could go every day | JournalEntry}
+CreateEntry Record new jouranl entry {Today I went to the store. It was awesome and I wish I could go every day | JournalEntry}
+CreateEntry Start recording new entry {Today I went to the store. It was awesome and I wish I could go every day | JournalEntry}
+CreateEntry Start recording new journal entry {Today I went to the store. It was awesome and I wish I could go every day | JournalEntry}
+CreateEntry Dear Lex {Today I went to the store. It was awesome and I wish I could go every day | JournalEntry}
+CreateEntry Record new entry {I applied to college today. I can't believe it | JournalEntry}
+CreateEntry Record new diary entry {I applied to college today. I can't believe it | JournalEntry}
+CreateEntry Begin new entry {I applied to college today. I can't believe it | JournalEntry}
+CreateEntry Record new jouranl entry {I applied to college today. I can't believe it | JournalEntry}
+CreateEntry Start recording new entry {I applied to college today. I can't believe it | JournalEntry}
+CreateEntry Start recording new journal entry {I applied to college today. I can't believe it | JournalEntry}
+CreateEntry Dear Lex {I applied to college today. I can't believe it | JournalEntry}
+CreateEntry Record new entry {today was a great day. I went for a four mile run for the first time ever | JournalEntry}
+CreateEntry Record new diary entry {today was a great day. I went for a four mile run for the first time ever | JournalEntry}
+CreateEntry Begin new entry {today was a great day. I went for a four mile run for the first time ever | JournalEntry}
+CreateEntry Record new jouranl entry {today was a great day. I went for a four mile run for the first time ever | JournalEntry}
+CreateEntry Start recording new entry {today was a great day. I went for a four mile run for the first time ever | JournalEntry}
+CreateEntry Start recording new journal entry {today was a great day. I went for a four mile run for the first time ever | JournalEntry}
+CreateEntry Dear Lex {today was a great day. I went for a four mile run for the first time ever | JournalEntry}
+UpdateEntry Add to todays journal that {I went to the beach after work | JournalUpdate}
+UpdateEntry Edit journal saying {I went to the beach after work | JournalUpdate}
+UpdateEntry Edit journal saying {This afternoon I hung out with my friends and saw a movie. It was a lot of fun | JournalUpdate}
 ReadEntry Read my journal from {Date}
 ReadEntry Read entry from {Date}
 ReadEntry Read journal entered on {Date}
@@ -9,21 +31,30 @@ ReadEntry What was my entry on {Date}
 ReadEntry What was my entry from {Date}
 ReadEntry What was my journal entry on {Date}
 ReadEntry What was my journal entry from {Date}
+ReadEntry What was my journal entry {Date}
 ReadEntry What did I journal {Date}
 ReadEntry What did I journal on {Date}
 ReadEntry What did I write {Date}
+ReadEntry What did I do on {Date}
+ReadEntry What did I do {Date}
 ReadEntry What did I write on {Date}
 ReadEntry Tell me my entry from {Date}
 ReadEntry Tell me my journal entry from {Date}
 ReadEntry Tell me my entry on {Date}
 ReadEntry Tell me my journal entry on {Date}
 ReadEntry Tell me {Date} s entry
-CreateNewJournal Create a new journal called {JournalName}
+CreateNewJournal Create a new journal called {Food|JournalName}
+CreateNewJournal Create a new journal called {Travel|JournalName}
+CreateNewJournal Create a new diary called {Food|JournalName}
+CreateNewJournal Create a new diary called {Travel|JournalName}
+CreateNewJournal Create a new journal called {Daily word|JournalName}
 ListAllJournals List all of the journals I have
 ListAllJournals List my journals
 ListAllJournals List all of my journals
 ListAllJournals What journals do I have
+ListAllJournals What are my journals
+ListAllJournals What diaries do I have
+ListAllJournals What are my diaries
 ListAllJournals List all of the diaries I have
 ListAllJournals List my diaries
 ListAllJournals List all of my diaries
-ListAllJournals What diaries do I have

@@ -4,6 +4,7 @@ var google = require('googleapis')
 var oauth2Client = require('../helpers/auth');
 var createFile = require('../helpers/createFile');
 var listFiles = require('../helpers/listFiles');
+var createEntry = require('../helpers/createEntry');
 var constants = require('../constants');
 
 var mainStateHandlers = Alexa.CreateStateHandler(constants.states.MAIN, {
@@ -16,37 +17,30 @@ var mainStateHandlers = Alexa.CreateStateHandler(constants.states.MAIN, {
       this.handler.state = constants.states.ONBOARDING;
       this.emitWithState('NewSession');
     }
-  },
-  'CreateNewJournal': function(){
-  	var journalName = this.event.request.intent.slots.JournalName.value;
-  	if(journalName){
-			var accessToken = this.event.session.user.accessToken;
-
-  		var fileMetadata = {
-  			'name' : 'Dear-Lex-'+journalName,
-  			'mimeType' : 'application/vnd.google-apps.document'
-  		}
-  		var media = {
-  			'mimeType' : 'text/plain',
-  			'body' : ''
-  		}
-      // var q = 'mimeType = "application/vnd.google-apps.folder" and name="Dear-Lex"'
-      // listFiles(google, accessToken, oauth2Client, q).then(function(res){
-    		// createFile(google, accessToken, oauth2Client, fileMetadata, media)
-    		// .then(file=> console.log(file.id))
-      // })
+  },'CreateNewJournal': function(){
+    var journalName = this.event.request.intent.slots.JournalName.value;
+    if(journalName){
+      var accessToken = this.event.session.user.accessToken;
+      var fileMetadata = {
+        'name' : 'Dear-Lex-'+journalName,
+        'mimeType' : 'application/vnd.google-apps.document'
+      }
+      var media = {
+        'mimeType' : 'text/plain',
+        'body' : ''
+      }
       createFile(google, accessToken, oauth2Client, fileMetadata, media)
         .then(file=> console.log(file.id))
-  		this.emit(':ask', `I successfully created your journal, ${journalName}`, `'What would you like to do now?'`);
-  	} else {
-  		this.emit(':ask', `Sorry, I didn\'t hear the name you wanted for your new journal`, `Try to create a new journal again, please.`);
-  	}
+      this.emit(':ask', `I successfully created your journal, ${journalName}`, `'What would you like to do now?'`);
+    } else {
+      this.emit(':ask', `Sorry, I didn\'t hear the name you wanted for your new journal`, `Try to create a new journal again, please.`);
+    }
   },
   'ListAllJournals': function(){
     var q = "name contains 'Dear-Lex'";
     var accessToken = this.event.session.user.accessToken;
     listFiles(google, accessToken, oauth2Client, q)
-    .then(function(res){
+    .then((res)=> {
       var fileList = [];
       res.files.forEach(function(file) {
         console.log('Found file: ', file.name, file.id);
@@ -61,11 +55,25 @@ var mainStateHandlers = Alexa.CreateStateHandler(constants.states.MAIN, {
           journalList += fileList[i] + ", "
         }
       }
-    });
-    this.emit(':ask', `The journals that you have are ${journalList}. You can create an entry in one of these journals or ask me to read an entry to you`,'What would you like to do?');
+      this.emit(':ask', `The journals that you have are ${journalList}. You can create an entry in one of these journals or ask me to read an entry to you`,'What would you like to do?');
+    })
+    .catch(error => {
+      this.emit(':tell', 'Sorry, there was an error.');
+    })
 	},
   'CreateEntry': function(){
-
+    var entry = this.event.request.intent.slots.JournalEntry.value;
+    var accessToken = this.event.session.user.accessToken;
+    var date = new Date().toLocaleDateString()
+    var generalFolderID = this.attributes['journalID']
+    createEntry(google, accessToken, oauth2Client, generalFolderID, date, entry)
+    .then(res => {
+      console.log(res)
+      this.emit(':tell', 'I successfully created a journal entry for you')
+    })
+    .catch(error => {
+      this.emit(':tell', `Sorry, there was an error ${error}.`);
+    })
   },
   'ReadEntry': function(){
 

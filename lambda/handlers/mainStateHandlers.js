@@ -5,6 +5,8 @@ var oauth2Client = require('../helpers/auth');
 var createFile = require('../helpers/createFile');
 var listFiles = require('../helpers/listFiles');
 var createEntry = require('../helpers/createEntry');
+var exportFile = require('../helpers/exportFile');
+var updateEntry = require('../helpers/updateEntry');
 var constants = require('../constants');
 
 var mainStateHandlers = Alexa.CreateStateHandler(constants.states.MAIN, {
@@ -66,9 +68,16 @@ var mainStateHandlers = Alexa.CreateStateHandler(constants.states.MAIN, {
     var accessToken = this.event.session.user.accessToken;
     var date = new Date().toLocaleDateString()
     var generalFolderID = this.attributes['journalID']
-    createEntry(google, accessToken, oauth2Client, generalFolderID, date, entry)
+    var bodyInfo = ''
+    if(this.attributes['bodyData']){
+      bodyInfo = this.attributes['bodyData']
+      this.attributes['bodyData'] = bodyInfo + '\n' + '\n' + date + ': ' + entry
+    } else {
+      this.attributes['bodyData'] = date + ': ' + entry
+    }
+    createEntry(google, accessToken, oauth2Client, generalFolderID, date, this.attributes['bodyData'])
     .then(res => {
-      console.log(res)
+      console.log('this is our created entry',res)
       this.emit(':tell', 'I successfully created a journal entry for you')
     })
     .catch(error => {

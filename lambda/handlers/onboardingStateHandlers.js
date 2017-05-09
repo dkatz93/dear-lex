@@ -52,8 +52,31 @@ var onboardingStateHandlers = Alexa.CreateStateHandler(constants.states.ONBOARDI
   			} else {
   				console.log('file.id', file.id)
   				this.attributes['folderID'] = file.id;
+  				var fileMetadata = {
+  					'name' : 'general',
+  					'mimeType' : 'application/vnd.google-apps.document',
+		  			parents: [file.id]
+  				}
+  				var media = {
+		  			'mimeType' : 'text/plain',
+		  			'body' : ''
+		  		}
+  				drive.files.create({
+		  			resource: fileMetadata,
+		  			media: media,
+		  			field: 'id'
+		  		}, function(err, file){
+		  			if(err){
+		  				console.log(err);
+		  			} else {
+		  				console.log('file.id', file.id)
+		  				//this.attributes['folderID'] = file.id;
+		  				
+		  			}
+		  		})
   			}
   		})
+  		this.handler.state = constants.states.MAIN;
       this.emit(':ask', `Ok ${name}! I have created a folder in google drive called Dear Lex where you can manage your journal. Tell me if you would like to create a journal, create an entry or have me read you a prior entry.`, `What would you like to do?`);
     } else {
       this.emit(':ask', `Sorry, I didn\'t recognise that name!`, `'Tell me your name by saying: My name is, and then your name.'`);

@@ -2,6 +2,7 @@ var Alexa = require('alexa-sdk');
 var google = require('googleapis');
 
 var oauth2Client = require('../helpers/auth')
+var createFolder = require('../helpers/createFolder')
 var constants = require('../constants');
 
 var onboardingStateHandlers = Alexa.CreateStateHandler(constants.states.ONBOARDING, {
@@ -38,43 +39,9 @@ var onboardingStateHandlers = Alexa.CreateStateHandler(constants.states.ONBOARDI
   			'mimeType' : 'application/vnd.google-apps.folder'
   		};
   		var accessToken = this.event.session.user.accessToken;
-  		oauth2Client.setCredentials({access_token: accessToken})
-  		var drive = google.drive({
-  			version: 'v3',
-  			auth: oauth2Client
-  		})
-  		drive.files.create({
-  			resource: folderMetadata,
-  			fields: 'id'
-  		}, function(err, file){
-  			if(err){
-  				console.log(err);
-  			} else {
-  				console.log('file.id', file.id)
-  				this.attributes['folderID'] = file.id;
-  				var fileMetadata = {
-  					'name' : 'general',
-  					'mimeType' : 'application/vnd.google-apps.document',
-		  			parents: [file.id]
-  				}
-  				var media = {
-		  			'mimeType' : 'text/plain',
-		  			'body' : ''
-		  		}
-  				drive.files.create({
-		  			resource: fileMetadata,
-		  			media: media,
-		  			field: 'id'
-		  		}, function(err, file){
-		  			if(err){
-		  				console.log(err);
-		  			} else {
-		  				console.log('file.id', file.id)
-		  				//this.attributes['folderID'] = file.id;
-		  				
-		  			}
-		  		})
-  			}
+  		createFolder(google, accessToken, oauth2Client, folderMetadata)
+  		.then(function(file){
+  			this.attributes['folderID'] = file.id;
   		})
   		this.handler.state = constants.states.MAIN;
       this.emit(':ask', `Ok ${name}! I have created a folder in google drive called Dear Lex where you can manage your journal. Tell me if you would like to create a journal, create an entry or have me read you a prior entry.`, `What would you like to do?`);
